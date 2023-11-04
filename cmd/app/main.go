@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"gasprice-oracle/internal/config"
 	"gasprice-oracle/internal/service"
 )
@@ -13,7 +12,5 @@ func main() {
 		panic(err)
 	}
 
-	ctx := context.Background()
-
-	_ = service.RunApplication(ctx, *cfg)
+	_ = service.RunApplication(*cfg)
 }

@@ -9,11 +9,13 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func RunApplication(ctx context.Context, cfg config.Config) error {
+func RunApplication(cfg config.Config) error {
 	logger_, loggerCleanup := logger.New(cfg)
 	defer loggerCleanup()
 
 	logger_.Info("initializing application")
+
+	ctx := context.Background()
 
 	storage_ := storage.NewMemoryStorage()
 

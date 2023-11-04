@@ -8,7 +8,7 @@ import (
 type Config struct {
 	LogLevel string `envconfig:"LOG_LEVEL" default:"info"`
 
-	NodeUrl string `envconfig:"NODE_URL"`
+	NodeUrl string `envconfig:"NODE_URL" required:"true"`
 
 	Host           string        `envconfig:"HOST" default:"0.0.0.0"`
 	Port           string        `envconfig:"PORT" default:"8000"`
