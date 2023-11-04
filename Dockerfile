@@ -13,5 +13,7 @@ FROM --platform=linux/amd64 alpine:3.18.0
 RUN apk --no-cache add gcompat tini
 COPY --from=builder /app /app
 
+EXPOSE 8000
+
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD [ "/app" ]
