@@ -1,4 +1,5 @@
 .env
+config.yaml
 
 # Created by https://www.toptal.com/developers/gitignore/api/go,goland,linux
 # Edit at https://www.toptal.com/developers/gitignore?templates=go,goland,linux

@@ -1,4 +1,4 @@
-logLevel: debug
+logLevel: info
 
 server:
   host: 0.0.0.0
