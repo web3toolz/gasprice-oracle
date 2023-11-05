@@ -4,7 +4,8 @@ import (
 	"errors"
 	"gasprice-oracle/internal/adapter/storage"
 	"gasprice-oracle/internal/config"
-	"gasprice-oracle/internal/ports"
+	"gasprice-oracle/internal/ports/rest"
+	"github.com/leonelquinteros/router"
 	"go.uber.org/zap"
 	"net"
 	"net/http"
@@ -26,16 +27,21 @@ func (h *HTTPServerHandler) Storage() storage.IStorage {
 }
 
 func (h *HTTPServerHandler) Run() error {
-	handler := ports.RootHandler{
+
+	r := router.New("/")
+
+	restHandler := rest.RHandler{
 		Logger:   h.logger,
 		Storage:  h.storage,
 		Networks: h.networks,
 	}
 
+	r.Add(h.cfg.Path, &restHandler)
+
 	server := http.Server{
 		Addr: net.JoinHostPort(h.cfg.Host, h.cfg.Port),
 
-		Handler: handler.ServeHTTP(),
+		Handler: router.Build(r),
 
 		ReadHeaderTimeout: h.cfg.Timeout,
 		ReadTimeout:       h.cfg.Timeout,

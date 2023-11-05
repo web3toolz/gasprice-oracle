@@ -15,8 +15,8 @@ WORKDIR /home/app
 
 RUN apk --no-cache add gcompat tini
 COPY --from=builder /gasprice-oracle /home/app/gasprice-oracle
-COPY config.yaml /home/app/config.yaml
 
+# expose default port
 EXPOSE 8000
 
 ENTRYPOINT ["/sbin/tini", "--"]

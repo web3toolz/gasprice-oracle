@@ -24,8 +24,6 @@ func New(logLevel string) (*zap.Logger, func()) {
 		log.Fatal("failed to initialize logger", err)
 	}
 
-	log.Println("Level ", logLevel)
-
 	return logger, func() {
 		_ = logger.Sync()
 	}

@@ -24,6 +24,7 @@ require (
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/holiman/uint256 v1.2.3 // indirect
+	github.com/leonelquinteros/router v0.0.0-20180430184947-db5cc8a293d4 // indirect
 	github.com/mmcloughlin/addchain v0.4.0 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
 	github.com/prometheus/client_golang v1.17.0 // indirect

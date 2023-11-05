@@ -108,7 +108,7 @@ func (w *WorkerHandler) runIterationForNetwork(network string, url string) (*res
 	}
 
 	updatedAt := time.Now().Unix()
-	return &result{network: network, url: url, distribution: distribution, updatedAt: updatedAt}, nil
+	return &result{network: network, url: url, distribution: *distribution, updatedAt: updatedAt}, nil
 
 }
 
