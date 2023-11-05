@@ -7,10 +7,20 @@ import (
 	"log"
 )
 
+var flags = []cli.Flag{
+	&cli.StringFlag{
+		Name:    "config",
+		Aliases: []string{"c"},
+		Usage:   "Config file path",
+		Value:   "config.yaml",
+	},
+}
+
 func Cmd() *cli.Command {
 	return &cli.Command{
 		Name:  "server",
 		Usage: "Run http server",
+		Flags: flags,
 		Action: func(cCtx *cli.Context) error {
 			cfg, err := config.LoadConfigFromFile(cCtx.String("config"))
 

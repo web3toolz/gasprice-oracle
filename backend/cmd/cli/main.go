@@ -7,20 +7,10 @@ import (
 	"os"
 )
 
-var flags = []cli.Flag{
-	&cli.StringFlag{
-		Name:    "config",
-		Aliases: []string{"c"},
-		Usage:   "Config file path",
-		Value:   "config.yaml",
-	},
-}
-
 func main() {
 	app := &cli.App{
 		Name:                 "gasprice-oracle",
 		EnableBashCompletion: true,
-		Flags:                flags,
 		Commands: []*cli.Command{
 			server.Cmd(),
 		},

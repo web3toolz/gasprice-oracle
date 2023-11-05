@@ -14,8 +14,11 @@ type Distribution struct {
 }
 
 func findPercentile(data []int64, percentile float64) (int64, error) {
-	if len(data) == 0 {
+	length := len(data)
+	if length == 0 {
 		return 0, nil
+	} else if length < 3 {
+		return data[length-1], nil
 	}
 	var dataAsFloat64 []float64
 	for _, v := range data {
