@@ -1,0 +1,15 @@
+logLevel: debug
+
+server:
+  host: 0.0.0.0
+  port: 8001
+  timeout: 30s
+
+worker:
+  interval: 10s
+
+networks:
+  - name: "ethereum-mainnet"
+    url: "https://cloudflare-eth.com"
+  - name: "bsc-mainnet"
+    url: "https://bsc-dataseed.binance.org"
