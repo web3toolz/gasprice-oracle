@@ -15,6 +15,8 @@ WORKDIR /home/app
 
 RUN apk --no-cache add gcompat tini
 COPY --from=builder /gasprice-oracle /home/app/gasprice-oracle
+# copy default settings
+COPY config.example.yaml /home/app/config.example.yaml
 
 # expose default port
 EXPOSE 8000
