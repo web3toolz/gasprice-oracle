@@ -1,0 +1,72 @@
+{
+  "arbitrum-one-mainnet": {
+    "updatedAt": 1699379473,
+    "slow": 50000000,
+    "normal": 50000000,
+    "fast": 100000000,
+    "fastest": 100000000
+  },
+  "avalanche-mainnet": {
+    "updatedAt": 1699379473,
+    "slow": 65000000000,
+    "normal": 562500000000,
+    "fast": 1025000000000,
+    "fastest": 1177656250000
+  },
+  "base-mainnet": {
+    "updatedAt": 1699379473,
+    "slow": 350,
+    "normal": 350,
+    "fast": 449,
+    "fastest": 50000275
+  },
+  "bsc-mainnet": {
+    "updatedAt": 1699379473,
+    "slow": 3000000000,
+    "normal": 3000000000,
+    "fast": 3030000000,
+    "fastest": 5251000000
+  },
+  "cronos-mainnet": {
+    "updatedAt": 1699379473,
+    "slow": 4625831538471,
+    "normal": 4962915822000,
+    "fast": 5300000000000,
+    "fastest": 7507123004589
+  },
+  "ethereum-mainnet": {
+    "updatedAt": 1699379474,
+    "slow": 31400150351,
+    "normal": 33400150351,
+    "fast": 36768212858,
+    "fastest": 47460369137
+  },
+  "fantom-opera-mainnet": {
+    "updatedAt": 1699379473,
+    "slow": 25250000000,
+    "normal": 26000000000,
+    "fast": 27342012517,
+    "fastest": 151176684360
+  },
+  "gnosis-mainnet": {
+    "updatedAt": 1699379473,
+    "slow": 11632358144,
+    "normal": 13061418705,
+    "fast": 13253834650,
+    "fastest": 22335000000
+  },
+  "optimism-mainnet": {
+    "updatedAt": 1699379473,
+    "slow": 15668930,
+    "normal": 24815678,
+    "fast": 43806022,
+    "fastest": 83029491
+  },
+  "polygon-mainnet": {
+    "updatedAt": 1699379473,
+    "slow": 227591539702,
+    "normal": 245156246320,
+    "fast": 253954835646,
+    "fastest": 310869836372
+  }
+}
