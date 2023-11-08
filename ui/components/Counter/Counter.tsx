@@ -16,7 +16,7 @@ export default function Counter({updateTime}: Props) {
     useEffect(() => {
         timerInternal.start();
         return timerInternal.stop;
-    }, [updateTime])
+    }, [updateTime, timerInternal])
 
 
     return (

@@ -1,5 +1,38 @@
 # Gasprice oracle
 
+## UI
+
+### Install
+
+```shell
+cd u
+yarn install
+```
+
+### Prepare configuration
+
+Copy .env.template to .env.local and edit it.
+
+```shell
+cp .env.template .env.local
+```
+
+### Run server in development mode
+
+Go to `https://localhost:3000` in your browser.
+
+```shell
+yarn dev
+```
+
+### Build static files
+
+They will be placed in `out` directory.
+
+```shell
+yarn build
+```
+
 ## Backend
 
 ### Install
