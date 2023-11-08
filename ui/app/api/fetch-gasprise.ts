@@ -1,6 +1,8 @@
 import axios from "axios";
 
 
+const API_URL = process.env.API_URL || "http://0.0.0.0:8000/";
+
 export const GasPriceStrategy = {
     SLOW: "slow",
     NORMAL: "normal",
@@ -15,15 +17,15 @@ export interface GasPriceData {
 
 export interface NetworkData {
     title: string;
-    updatedAt: string;
-    data: GasPriceData[];
+    updatedAt?: string;
+    data?: GasPriceData[];
 }
 
 
 export async function fetchGasPriceData(): Promise<NetworkData[]> {
     return (
         axios
-            .get("http://0.0.0.0:8000/")
+            .get(API_URL)
             .then((response) => response.data)
             .then((data) => {
                 const networkData: NetworkData[] = [];

@@ -12,6 +12,10 @@ export function timeDiffInSeconds(time: Date): number {
     return Math.round((now.getTime() - time.getTime()) / 1000);
 }
 
+// ethereum-mainnet to Ethereum Mainnet
+export function formatNetworkName(networkName: string): string {
+    return networkName.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+}
 
 export function noop(): void {
     // do nothing

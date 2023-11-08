@@ -1,56 +1,46 @@
 "use client";
-import {fetchGasPriceData, GasPriceData, NetworkData} from "@/app/api/fetch-gasprise";
-import {ReactElement, useEffect, useState} from "react";
-import {noop, timeDiffInSeconds} from "@/utils";
-import Card from "@/components/Card/Card";
+import {fetchGasPriceData, NetworkData} from "@/app/api/fetch-gasprise";
+import {useEffect, useState} from "react";
+import {useInterval} from '@mantine/hooks';
+import {noop} from "@/utils";
+import CardGrid from "@/components/CardsGrid/CardGrid";
+import NetworkSelector from "@/components/NetworkSelector/NetworkSelector";
+import Counter from "@/components/Counter/Counter";
+
+const defaultChosenNetwork: string = "ethereum-mainnet";
 
 
 export default function Home() {
-    let lastUpdateTime: Date = new Date();
-    const [chosenNetwork, setChosenNetwork] = useState('');
-    const [updateTimeDiff, setUpdateTimeDiff] = useState<number>(0);
-    const [networkData, setNetworkData] = useState<NetworkData[]>([]);
-    const ethMainnetData: NetworkData = networkData.filter((item: NetworkData) => item.title === 'ethereum-mainnet')[0] || {};
+    const [lastUpdateTime, setLastUpdateTime] = useState<Date>(new Date());
+    const [networkData, setNetworkData] = useState<NetworkData>();
+    const [networksData, setNetworksData] = useState<NetworkData[]>([]);
+    const [chosenNetwork, setChosenNetwork] = useState<string>(defaultChosenNetwork);
+    const availableNetworks: string[] = networksData.map((item: NetworkData) => item.title);
 
-    useEffect(() => {
-        const func = async () => {
-            return fetchGasPriceData()
-                .then((data: NetworkData[]) => {
-                    setNetworkData(data);
-                    lastUpdateTime = new Date();
-                })
-                .catch(noop);
-        }
-
-        func().then(noop);
-
-        const apiTimeoutId = setTimeout(() => {
-            func().then(noop);
-        }, 5 * 1000);
-
-        const timerTimeoutId = setInterval(() => {
-            setUpdateTimeDiff(timeDiffInSeconds(lastUpdateTime));
-        }, 1000)
-
-        return () => {
-            console.log("Clearing timeout");
-            clearTimeout(apiTimeoutId);
-            clearTimeout(timerTimeoutId);
-        };
-    }, [])
-
-
-    let cards: ReactElement[] = [];
-
-    if (ethMainnetData.data) {
-        cards = (
-            ethMainnetData.data.map((item: GasPriceData) => {
-                return <Card title={item.title} gasPriceValue={item.value}/>
-            })
-        )
-    } else {
-        cards = [];
+    const onSelectorChange = (value: string) => {
+        setChosenNetwork(value);
+        setNetworkData(networksData.filter(i => i.title === value)[0]);
     }
+
+    const fetchGasPriceDataWrapper = async () => {
+        return fetchGasPriceData()
+            .then((data: NetworkData[]) => {
+                console.log("update")
+                setNetworksData(data);
+                setNetworkData(data.filter(i => i.title === chosenNetwork)[0]);
+                setLastUpdateTime(new Date());
+            })
+            .catch(noop);
+    }
+
+    // fetch data every 5 seconds
+    const fetchDataInterval = useInterval(() => fetchGasPriceDataWrapper().then(noop), 5 * 1000);
+    useEffect(() => {
+        fetchGasPriceDataWrapper().then(noop);
+        fetchDataInterval.start();
+        return fetchDataInterval.stop;
+    }, [chosenNetwork]);
+
 
     return (
         <section className="bg-black">
@@ -62,14 +52,28 @@ export default function Home() {
                     Fetch real-time gas prices for multiple blockchain networks effortlessly, ensuring your transactions
                     are cost-effective.
                 </p>
-                <div
-                    className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-3">
-                    {cards}
-                </div>
-                <div className="mt-6 text-xs text-zinc-400 text-right">
-                    Last update: {updateTimeDiff} seconds ago
-                </div>
-
+                {
+                    networksData.length > 0 &&
+                    <div className="mt-12 space-y-4 flex justify-center items-center">
+                        <div className="sm:w-1/3">
+                            <NetworkSelector
+                                value={chosenNetwork}
+                                options={availableNetworks}
+                                onChange={onSelectorChange}
+                            />
+                        </div>
+                    </div>
+                }
+                {
+                    networksData.length > 0 &&
+                    <CardGrid networkData={networkData}/>
+                }
+                {
+                    networksData.length > 0 &&
+                    <div className="mt-6 text-xs text-zinc-400 text-right">
+                        <Counter updateTime={lastUpdateTime}/>
+                    </div>
+                }
             </div>
         </section>
     )
