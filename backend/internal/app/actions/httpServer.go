@@ -6,6 +6,7 @@ import (
 	"gasprice-oracle/internal/config"
 	"gasprice-oracle/internal/ports/rest"
 	"github.com/leonelquinteros/router"
+	"github.com/rs/cors"
 	"go.uber.org/zap"
 	"net"
 	"net/http"
@@ -36,7 +37,7 @@ func (h *HTTPServerHandler) Run() error {
 		Networks: h.networks,
 	}
 
-	r.Add(h.cfg.Path, &restHandler)
+	r.Add(h.cfg.Path, cors.Default().Handler(&restHandler))
 
 	server := http.Server{
 		Addr: net.JoinHostPort(h.cfg.Host, h.cfg.Port),
