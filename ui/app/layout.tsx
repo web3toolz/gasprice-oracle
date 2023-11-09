@@ -22,8 +22,8 @@ export default function RootLayout({children}: {
 }) {
     const gTagScript: ReactElement = (
         <>
-            <Script async src={`https://www.googletagmanager.com/gtag/js?id=${gtagId}`}></Script>
-            <Script>
+            <Script id="gtag-source" async src={`https://www.googletagmanager.com/gtag/js?id=${gtagId}`}></Script>
+            <Script id="gtag-content">
                 {`
                     window.dataLayer = window.dataLayer || [];
                     function gtag(){dataLayer.push(arguments);}
