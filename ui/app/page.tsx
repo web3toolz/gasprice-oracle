@@ -1,46 +1,60 @@
 "use client";
 import {fetchGasPriceData, NetworkData} from "@/app/api/fetch-gasprise";
-import {useEffect, useState} from "react";
-import {useInterval} from '@mantine/hooks';
-import {noop} from "@/utils";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import CardGrid from "@/components/CardsGrid/CardGrid";
 import NetworkSelector from "@/components/NetworkSelector/NetworkSelector";
 import Counter from "@/components/Counter/Counter";
+import {noop} from "@/utils";
 
 const defaultChosenNetwork: string = "ethereum-mainnet";
 
-
-export default function Home() {
+function useGasPriceData(defaultNetwork: string) {
     const [lastUpdateTime, setLastUpdateTime] = useState<Date>(new Date());
-    const [networkData, setNetworkData] = useState<NetworkData>();
+    const [networkData, setNetworkData] = useState<NetworkData | undefined>(undefined);
     const [networksData, setNetworksData] = useState<NetworkData[]>([]);
-    const [chosenNetwork, setChosenNetwork] = useState<string>(defaultChosenNetwork);
-    const availableNetworks: string[] = networksData.map((item: NetworkData) => item.title);
+    const [chosenNetwork, setChosenNetwork] = useState<string>(defaultNetwork);
+    const [error, setError] = useState<Error | null>(null);
 
-    const onSelectorChange = (value: string) => {
-        setChosenNetwork(value);
-        setNetworkData(networksData.filter(i => i.title === value)[0]);
-    }
-
-    const fetchGasPriceDataWrapper = async () => {
-        return fetchGasPriceData()
-            .then((data: NetworkData[]) => {
-                console.log("update")
-                setNetworksData(data);
-                setNetworkData(data.filter(i => i.title === chosenNetwork)[0]);
-                setLastUpdateTime(new Date());
-            })
-            .catch(noop);
-    }
-
-    // fetch data every 5 seconds
-    const fetchDataInterval = useInterval(() => fetchGasPriceDataWrapper().then(noop), 5 * 1000);
-    useEffect(() => {
-        fetchGasPriceDataWrapper().then(noop);
-        fetchDataInterval.start();
-        return fetchDataInterval.stop;
+    const fetchGasPriceDataWrapper = useCallback(async () => {
+        try {
+            const data: NetworkData[] = await fetchGasPriceData();
+            setNetworksData(data);
+            setNetworkData(data.find(i => i.title === chosenNetwork));
+            setLastUpdateTime(new Date());
+        } catch (e: any) {
+            setError(e);
+        }
     }, [chosenNetwork]);
 
+    useEffect(() => {
+        fetchGasPriceDataWrapper().then(noop);
+        const intervalId = setInterval(fetchGasPriceDataWrapper, 5000);
+        return () => clearInterval(intervalId);
+    }, [fetchGasPriceDataWrapper]);
+    return {lastUpdateTime, networkData, networksData, chosenNetwork, setChosenNetwork, error};
+}
+
+
+export default function Home() {
+    const {
+        lastUpdateTime,
+        networkData,
+        networksData,
+        chosenNetwork,
+        setChosenNetwork,
+        error
+    } = useGasPriceData(defaultChosenNetwork);
+
+    const availableNetworks = useMemo(
+        () => networksData.map(item => item.title),
+        [networksData]
+    );
+
+    const onSelectorChange = useCallback((value: string) => {
+        setChosenNetwork(value);
+    }, [setChosenNetwork]);
+
+    const hasNetworkData = networksData.length > 0;
 
     return (
         <section className="bg-black">
@@ -53,27 +67,21 @@ export default function Home() {
                     are cost-effective.
                 </p>
                 {
-                    networksData.length > 0 &&
-                    <div className="mt-12 space-y-4 flex justify-center items-center">
-                        <div className="sm:w-1/3">
+                    hasNetworkData && (
+                        <>
                             <NetworkSelector
                                 value={chosenNetwork}
                                 options={availableNetworks}
                                 onChange={onSelectorChange}
                             />
-                        </div>
-                    </div>
+                            <CardGrid networkData={networkData}/>
+                            <div className="mt-6 text-xs text-zinc-400 text-right">
+                                <Counter updateTime={lastUpdateTime}/>
+                            </div>
+                        </>
+                    )
                 }
-                {
-                    networksData.length > 0 &&
-                    <CardGrid networkData={networkData}/>
-                }
-                {
-                    networksData.length > 0 &&
-                    <div className="mt-6 text-xs text-zinc-400 text-right">
-                        <Counter updateTime={lastUpdateTime}/>
-                    </div>
-                }
+                {error && <div>Error fetching data: {error.message}</div>}
             </div>
         </section>
     )

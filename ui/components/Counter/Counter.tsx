@@ -2,7 +2,6 @@ import {useEffect, useState} from "react";
 import {useInterval} from '@mantine/hooks';
 import {timeDiffInSeconds} from "@/utils";
 
-
 interface Props {
     updateTime: Date;
 }
@@ -18,8 +17,7 @@ export default function Counter({updateTime}: Props) {
         return timerInternal.stop;
     }, [updateTime, timerInternal])
 
-
     return (
-        <div>Last update: {timeDiff} seconds ago</div>
-    )
+        <div className="text-white">Last update: {timeDiff} seconds ago</div>
+    );
 }

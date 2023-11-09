@@ -9,7 +9,9 @@ RUN yarn install --frozen-lockfile --non-interactive
 COPY . /home/app
 
 ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_GTAG_ID
 ENV NEXT_PUBLIC_API_URL $NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_GTAG_ID $NEXT_PUBLIC_GTAG_ID
 
 ENV NODE_ENV production
 
