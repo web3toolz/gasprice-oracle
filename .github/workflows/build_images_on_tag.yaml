@@ -40,3 +40,6 @@ jobs:
           file: ./ui/Dockerfile
           push: true
           tags: web3toolz/gasprice-ui:${{ env.TAG_NAME }}
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_GTAG_ID=${{ vars.NEXT_PUBLIC_GTAG_ID }}

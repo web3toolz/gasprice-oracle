@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 golang:1.21.3-alpine as builder
+FROM --platform=linux/amd64 golang:1.21-alpine3.18 as builder
 
 WORKDIR /home/app
 
@@ -8,7 +8,7 @@ RUN go mod download
 RUN go build -o /gasprice-oracle ./cmd/cli
 
 
-FROM --platform=linux/amd64 alpine:3.18.0
+FROM --platform=linux/amd64 alpine:3.18.4
 
 RUN mkdir /home/app
 WORKDIR /home/app
