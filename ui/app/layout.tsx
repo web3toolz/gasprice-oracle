@@ -13,8 +13,9 @@ const inter = Inter({subsets: ['latin']})
 const gtagId: string | undefined = process.env.NEXT_PUBLIC_GTAG_ID;
 
 export const metadata: Metadata = {
-    title: 'Gas Price Oracle',
-    description: 'A simple gas price oracle for Ethereum and EVM chains.',
+    title: 'Gas Price Oracle | Web3toolz.com',
+    description: 'Real-time gas price data for Ethereum and EVM-compatible blockchains.',
+    keywords: 'EVM, Blockchain, Gas Price, Web3, Ethereum, BNB, Polygon, Optimism, Avalanche'
 }
 
 export default function RootLayout({children}: {

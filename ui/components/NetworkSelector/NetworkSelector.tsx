@@ -22,7 +22,6 @@ export default function NetworkSelector({value, options, onChange}: Props) {
         }}
         value={value}
         label="Select network"
-        description="Select network"
         data={formattedOptions}
         onChange={(event) => onChange(event.currentTarget.value)}
     />;
