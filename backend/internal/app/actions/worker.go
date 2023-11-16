@@ -113,6 +113,11 @@ func (w *WorkerHandler) runIterationForNetwork(network string, url string) (*res
 }
 
 func (w *WorkerHandler) saveResultToStorage(resultData result) error {
+	if resultData.distribution.IsEmpty() {
+		w.logger.Debug("distribution is empty, skipping saving to storage", zap.String("network", resultData.network))
+		return nil
+	}
+
 	w.logger.Debug("saving data to storage", zap.String("network", resultData.network), zap.Any("data", resultData.distribution))
 	_ = w.storage.Set(resultData.network, storagelib.UpdatedAt, resultData.updatedAt)
 	_ = w.storage.Set(resultData.network, storagelib.P40, resultData.distribution.P40)

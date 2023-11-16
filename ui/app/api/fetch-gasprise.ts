@@ -17,7 +17,7 @@ export interface GasPriceData {
 
 export interface NetworkData {
     title: string;
-    updatedAt?: string;
+    updatedAt?: Date;
     data?: GasPriceData[];
 }
 
@@ -39,7 +39,7 @@ export async function fetchGasPriceData(): Promise<NetworkData[]> {
                         {title: GasPriceStrategy.FAST, value: data[network][GasPriceStrategy.FAST]},
                         // {title: GasPriceStrategy.FASTEST, value: data[network][GasPriceStrategy.FASTEST]},
                     ];
-                    networkData.push({title, updatedAt: updatedAt.toLocaleString(), data: gasPriceData});
+                    networkData.push({title, updatedAt: updatedAt, data: gasPriceData});
                 });
                 return networkData;
             })

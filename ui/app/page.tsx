@@ -4,12 +4,11 @@ import {useCallback, useEffect, useMemo, useState} from "react";
 import CardGrid from "@/components/CardsGrid/CardGrid";
 import NetworkSelector from "@/components/NetworkSelector/NetworkSelector";
 import Counter from "@/components/Counter/Counter";
-import {noop} from "@/utils";
+import {noop, timeDiffInSeconds} from "@/utils";
 
 const defaultChosenNetwork: string = "ethereum-mainnet";
 
 function useGasPriceData(defaultNetwork: string) {
-    const [lastUpdateTime, setLastUpdateTime] = useState<Date>(new Date());
     const [networkData, setNetworkData] = useState<NetworkData | undefined>(undefined);
     const [networksData, setNetworksData] = useState<NetworkData[]>([]);
     const [chosenNetwork, setChosenNetwork] = useState<string>(defaultNetwork);
@@ -20,7 +19,6 @@ function useGasPriceData(defaultNetwork: string) {
             const data: NetworkData[] = await fetchGasPriceData();
             setNetworksData(data);
             setNetworkData(data.find(i => i.title === chosenNetwork));
-            setLastUpdateTime(new Date());
         } catch (e: any) {
             setError(e);
         }
@@ -31,13 +29,12 @@ function useGasPriceData(defaultNetwork: string) {
         const intervalId = setInterval(fetchGasPriceDataWrapper, 5000);
         return () => clearInterval(intervalId);
     }, [fetchGasPriceDataWrapper]);
-    return {lastUpdateTime, networkData, networksData, chosenNetwork, setChosenNetwork, error};
+    return {networkData, networksData, chosenNetwork, setChosenNetwork, error};
 }
 
 
 export default function Home() {
     const {
-        lastUpdateTime,
         networkData,
         networksData,
         chosenNetwork,
@@ -76,7 +73,7 @@ export default function Home() {
                             />
                             <CardGrid networkData={networkData}/>
                             <div className="mt-6 text-xs text-zinc-400 text-right">
-                                <Counter updateTime={lastUpdateTime}/>
+                                <Counter updateTime={networkData?.updatedAt}/>
                             </div>
                         </>
                     )

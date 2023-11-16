@@ -13,6 +13,10 @@ type Distribution struct {
 	P95 int64
 }
 
+func (d *Distribution) IsEmpty() bool {
+	return d.P40 == 0 && d.P60 == 0 && d.P75 == 0 && d.P95 == 0
+}
+
 func findPercentile(data []int64, percentile float64) (int64, error) {
 	length := len(data)
 	if length == 0 {

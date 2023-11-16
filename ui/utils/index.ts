@@ -7,7 +7,10 @@ export function weiToGwei(valueInWei: string): string {
     return gwei.toFixed(2);
 }
 
-export function timeDiffInSeconds(time: Date): number {
+export function timeDiffInSeconds(time: Date | null): number {
+    if (!time) {
+        return -1;
+    }
     const now: Date = new Date();
     return Math.round((now.getTime() - time.getTime()) / 1000);
 }
