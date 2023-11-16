@@ -6,7 +6,10 @@
 </p>
 
 <hr/>
-<h4><a target="_blank" href="https://gasprice.web3toolz.com/" rel="dofollow"><strong>Live Demo</strong></a></h4>
+<h4>
+<a target="_blank" href="https://gasprice.web3toolz.com/" rel="dofollow"><strong>Website</strong></a>&nbsp;·
+<a target="_blank" href="https://api-gasprice.web3toolz.com/" rel="dofollow"><strong>Public API</strong></a>
+</h4> 
 <hr/>
 
 Tool is designed to empower Web3 developers by providing real-time, accurate, and relevant gas price data for the top EVM (Ethereum Virtual Machine) compatible blockchains. 
@@ -15,7 +18,7 @@ Our goal is to streamline your development process by offering easy access to es
 ### Features
 
 * Top EVM Chains Support: Access gas price data from the most popular EVM-compatible blockchains.
-* Real-Time Data: Stay up-to-date with the latest gas prices, ensuring efficient and cost-effective transactions. See the full list of supported chains below.
+* Real-Time Data: Stay up-to-date with the latest gas prices, ensuring efficient and cost-effective transactions.
 * Free Public API: Easy and open access for all developers. No API key required.
 
 # Getting Started
@@ -25,7 +28,7 @@ Our goal is to streamline your development process by offering easy access to es
 **Install**
 
 ```shell
-cd u
+cd ui
 yarn install
 ```
 
@@ -67,14 +70,12 @@ go install
 Copy `config.example.yaml` to `config.yaml` to the same directory and edit it.
 
 ```shell
-cd backend
 cp config.example.yaml config.yaml
 ```
 
 **Run server in development mode**
 
 ```shell
-cd backend
 go run cmd/cli/main.go server
 ```
 
@@ -87,7 +88,6 @@ curl -X GET http://localhost:8080/ | jq
 **Build application**
 
 ```shell
-cd backend
 go build -o gasprice-oracle cmd/cli/main.go
 ```
 
