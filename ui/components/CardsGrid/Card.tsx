@@ -1,5 +1,4 @@
 import {capitalize, weiToGwei} from "@/utils";
-import { Skeleton } from '@mantine/core';
 
 interface Props {
     title: string;
@@ -10,6 +9,16 @@ interface Props {
 
 export default function Card({title, subtitle, gasPriceValue}: Props) {
 
+    let amount, unit;
+
+    if (parseInt(gasPriceValue) > 10 ** 9) {
+        amount = weiToGwei(gasPriceValue);
+        unit = 'gwei';
+    } else {
+        amount = gasPriceValue;
+        unit = 'wei';
+    }
+
     return (
         <div className="rounded-lg shadow-sm divide-y divide-zinc-600 bg-zinc-900">
             <div className="p-6">
@@ -18,10 +27,10 @@ export default function Card({title, subtitle, gasPriceValue}: Props) {
                 <p className="mt-8">
                     {
                         gasPriceValue ?
-                        <span className="text-5xl font-extrabold text-white">{weiToGwei(gasPriceValue)}</span> :
+                            <span className="text-5xl font-extrabold text-white">{amount}</span> :
                             <span className="text-5xl font-extrabold text-white">?</span>
                     }
-                    <span className="text-base font-medium text-zinc-100 ml-2">gwei</span>
+                    <span className="text-base font-medium text-zinc-100 ml-2">{unit}</span>
                 </p>
             </div>
         </div>

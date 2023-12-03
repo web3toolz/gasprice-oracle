@@ -1,10 +1,11 @@
 "use client";
-import {fetchGasPriceData, NetworkData} from "@/app/api/fetch-gasprise";
-import {useCallback, useEffect, useMemo, useState} from "react";
+import {fetchGasPrice} from "@/api/fetchGasPrice";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import CardGrid from "@/components/CardsGrid/CardGrid";
 import NetworkSelector from "@/components/NetworkSelector/NetworkSelector";
 import Counter from "@/components/Counter/Counter";
-import {noop, timeDiffInSeconds} from "@/utils";
+import {noop} from "@/utils";
+import {NetworkData} from "@/types";
 
 const defaultChosenNetwork: string = "ethereum-mainnet";
 
@@ -16,7 +17,7 @@ function useGasPriceData(defaultNetwork: string) {
 
     const fetchGasPriceDataWrapper = useCallback(async () => {
         try {
-            const data: NetworkData[] = await fetchGasPriceData();
+            const data: NetworkData[] = await fetchGasPrice();
             setNetworksData(data);
             setNetworkData(data.find(i => i.title === chosenNetwork));
         } catch (e: any) {
@@ -30,6 +31,23 @@ function useGasPriceData(defaultNetwork: string) {
         return () => clearInterval(intervalId);
     }, [fetchGasPriceDataWrapper]);
     return {networkData, networksData, chosenNetwork, setChosenNetwork, error};
+}
+
+function HomeTitle(): React.ReactElement {
+    return (
+        <h1 className="text-4xl font-extrabold text-white sm:text-center sm:text-6xl">
+            Cross-Chain Gas tracker
+        </h1>
+    )
+}
+
+function HomeDescription(): React.ReactElement {
+    return (
+        <p className="max-w-2xl m-auto mt-5 text-xl text-zinc-200 sm:text-center sm:text-2xl">
+            Fetch real-time gas prices for multiple blockchain networks effortlessly, ensuring your transactions
+            are cost-effective.
+        </p>
+    )
 }
 
 
@@ -56,13 +74,8 @@ export default function Home() {
     return (
         <section className="bg-black">
             <div className="max-w-6xl px-4 py-8 mx-auto sm:py-24 sm:px-6 lg:px-8">
-                <h1 className="text-4xl font-extrabold text-white sm:text-center sm:text-6xl">
-                    Cross-Chain Gas tracker
-                </h1>
-                <p className="max-w-2xl m-auto mt-5 text-xl text-zinc-200 sm:text-center sm:text-2xl">
-                    Fetch real-time gas prices for multiple blockchain networks effortlessly, ensuring your transactions
-                    are cost-effective.
-                </p>
+                <HomeTitle/>
+                <HomeDescription/>
                 {
                     hasNetworkData && (
                         <>

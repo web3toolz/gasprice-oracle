@@ -1,28 +1,12 @@
 import axios from "axios";
 
+import {GasPriceData, GasPriceStrategy, NetworkData} from "@/types";
+
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://0.0.0.0:8000/";
 
-export const GasPriceStrategy = {
-    SLOW: "slow",
-    NORMAL: "normal",
-    FAST: "fast",
-    FASTEST: "fastest",
-};
 
-export interface GasPriceData {
-    title: string;
-    value: string;
-}
-
-export interface NetworkData {
-    title: string;
-    updatedAt?: Date;
-    data?: GasPriceData[];
-}
-
-
-export async function fetchGasPriceData(): Promise<NetworkData[]> {
+export async function fetchGasPrice(): Promise<NetworkData[]> {
     return (
         axios
             .get(API_URL)

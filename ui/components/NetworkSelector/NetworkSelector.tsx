@@ -2,7 +2,7 @@ import {ComboboxItem, NativeSelect} from '@mantine/core';
 import {formatNetworkName} from "@/utils";
 
 interface Props {
-    value: string;
+    value?: string;
     options: string[];
     onChange: Function;
 }
