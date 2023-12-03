@@ -1,36 +1,16 @@
 "use client";
-import {fetchGasPrice} from "@/api/fetchGasPrice";
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import React, {useCallback, useEffect, useMemo} from "react";
 import CardGrid from "@/components/CardsGrid/CardGrid";
 import NetworkSelector from "@/components/NetworkSelector/NetworkSelector";
 import Counter from "@/components/Counter/Counter";
-import {noop} from "@/utils";
+import {useFetchGasPriceDataPolling} from "@/hooks/useFetchGasPriceData";
+import {useFilterGasPriceData} from "@/hooks/useFilterGasPriceData";
+import {clearInterval} from "timers";
 import {NetworkData} from "@/types";
 
-const defaultChosenNetwork: string = "ethereum-mainnet";
 
-function useGasPriceData(defaultNetwork: string) {
-    const [networkData, setNetworkData] = useState<NetworkData | undefined>(undefined);
-    const [networksData, setNetworksData] = useState<NetworkData[]>([]);
-    const [chosenNetwork, setChosenNetwork] = useState<string>(defaultNetwork);
-    const [error, setError] = useState<Error | null>(null);
-
-    const fetchGasPriceDataWrapper = useCallback(async () => {
-        try {
-            const data: NetworkData[] = await fetchGasPrice();
-            setNetworksData(data);
-            setNetworkData(data.find(i => i.title === chosenNetwork));
-        } catch (e: any) {
-            setError(e);
-        }
-    }, [chosenNetwork]);
-
-    useEffect(() => {
-        fetchGasPriceDataWrapper().then(noop);
-        const intervalId = setInterval(fetchGasPriceDataWrapper, 5000);
-        return () => clearInterval(intervalId);
-    }, [fetchGasPriceDataWrapper]);
-    return {networkData, networksData, chosenNetwork, setChosenNetwork, error};
+interface HomeProps {
+    initialData: NetworkData[]
 }
 
 function HomeTitle(): React.ReactElement {
@@ -53,12 +33,19 @@ function HomeDescription(): React.ReactElement {
 
 export default function Home() {
     const {
-        networkData,
         networksData,
+        error, loading,
+        intervalId,
+    } = useFetchGasPriceDataPolling({});
+    const {
+        networkData,
         chosenNetwork,
         setChosenNetwork,
-        error
-    } = useGasPriceData(defaultChosenNetwork);
+    } = useFilterGasPriceData(networksData);
+
+    useEffect(() => {
+        return intervalId && clearInterval(intervalId);
+    }, []);
 
     const availableNetworks = useMemo(
         () => networksData.map(item => item.title),

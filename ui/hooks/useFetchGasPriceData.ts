@@ -12,12 +12,12 @@ interface UseFetchGasPriceDataPollingProps {
 }
 
 export function useFetchGasPriceDataPolling({interval, initialData}: UseFetchGasPriceDataPollingProps): {
-    networkData: NetworkData[];
+    networksData: NetworkData[];
     loading: boolean;
     error: Error | null;
     intervalId?: NodeJS.Timeout
 } {
-    const [networkData, setNetworksData] = useState<NetworkData[]>([]);
+    const [networksData, setNetworksData] = useState<NetworkData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
     let intervalId;
@@ -26,25 +26,27 @@ export function useFetchGasPriceDataPolling({interval, initialData}: UseFetchGas
         setNetworksData(initialData)
     }
 
+    const fetchGasPriceWrapper = async () => {
+        try {
+            const data: NetworkData[] = await fetchGasPrice();
+            setNetworksData(data);
+        } catch (e: any) {
+            setError(e);
+        } finally {
+            setLoading(false);
+        }
+
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data: NetworkData[] = await fetchGasPrice();
-                setNetworksData(data);
-            } catch (e: any) {
-                setError(e);
-            } finally {
-                setLoading(false);
-            }
+        fetchGasPriceWrapper().then(noop);
 
-        };
-
-        fetchData().then(noop);
-        intervalId = setInterval(fetchData, interval || 5000);
+        intervalId = setInterval(fetchGasPriceWrapper, interval || 5000);
         return
     }, []);
 
-    return {networkData, loading, error, intervalId};
+
+    return {networksData, loading, error, intervalId};
 }
 
 export function useFetchGasPriceData(): { networkData: NetworkData[]; loading: boolean; error: Error | null } {

@@ -1,6 +1,6 @@
-import {NetworkData} from "@/app/api/fetch-gasprise";
 import Card from "@/components/CardsGrid/Card";
 import {ReactElement} from "react";
+import {NetworkData} from "@/types";
 
 interface Props {
     networkData?: NetworkData;
